@@ -1,0 +1,65 @@
+version: "3"
+
+services:
+  postgresql:
+    image: postgres:12.4-alpine
+    container_name: postgresql
+    restart: always
+    expose:
+      - 5432
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: "dbpassword1!"
+    networks:
+      - DBs-network
+
+  mysql:
+    image: mysql:8.0.21
+    container_name: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    expose:
+      - 3306
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: "dbpassword1!"
+    networks:
+      - DBs-network
+
+  mongodb:
+    image: mongo:4.4.0-bionic
+    restart: always
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongoroot
+      MONGO_INITDB_ROOT_PASSWORD: dbpassword1!
+      MONGO_INITDB_DATABASE: mongouser
+      MONGO_INITDB_USERNAME: mongodb
+      MONGO_INITDB_PASSWORD: dbpassword1!
+    expose:
+      - 27017
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data_folder:/data/db/
+      - ./init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh
+    networks:
+      - DBs-network
+
+  adminer:
+    image: adminer:4.7.7-standalone
+    container_name: adminer
+    restart: always
+    networks:
+      - DBs-network
+    expose:
+      - 8080
+    ports:
+      - 8080:8080
+networks:
+  DBs-network:
+
+volumes:
+  mongodb_data_folder:
