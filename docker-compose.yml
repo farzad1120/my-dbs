@@ -14,7 +14,7 @@ services:
     networks:
       - DBs-network
     volumes:
-        - /var/postgres/data:/var/lib/postgresql/data
+        - ./psql_data:/var/lib/postgresql/data
 
   # mysql:
   #   image: mysql:8.0.21
