@@ -1,4 +1,4 @@
-# DataBase Luncher
+# DataBase Launcher
 
 This Package installs followings:
 
